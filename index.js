@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/playground')
+mongoose.connect('mongodb://localhost/CBG')
 .then(() => console.log('Connected to the datbase....'))
 .catch((err) => console.error('Could not connect to the database', err));
 
@@ -11,7 +11,8 @@ const accountSchema = new mongoose.Schema({
   acc_number: String,
   tags: [ String ],
   date: { type: Date, default: Date.now },
-  transaction: Boolean 
+  transfer: Boolean, 
+  withdrawal: Boolean
 })
 
 // Creating a collection in mongoose 
@@ -19,10 +20,11 @@ const Account = mongoose.model('Bank',  accountSchema);
 
 async function createAccount() {
   const account = new Account({
-    acc_name: 'Promise',
-    acc_number:  0011223344,
+    acc_name: 'franky',
+    acc_number:  00112234550,
     tags: ['credit', 'debit'],
-    transaction: true
+    transfer: false,
+    withdrawal: true
   });
   
   const result = await account.save();
@@ -31,13 +33,13 @@ async function createAccount() {
 
 async function getAccounts() {
   const account = await Account
-  .find({ acc_name: '/^promise/', transaction: true})
+  .find({ acc_name: '/^franky/', transfer: false})
   .sort({acc_name: 1})
   .select({ name: 1, tags: 1})
   console.log(account);
 }
 
-createAccount()
+createAccount();
 getAccounts();
 
 
