@@ -65,6 +65,7 @@ router.delete('/:id', async (req, res) => {
   res.send(account);
 });
 
+// get account by ID
 router.get('/:id', async (req, res) => {
   const account = await Account.findById(req.params.id)
 
@@ -72,6 +73,7 @@ router.get('/:id', async (req, res) => {
   res.send(account);
 });
 
+//Validate functionality 
 function validateAccount(account) {
   const schema = {
     name: Joi.string().min(4).required()
