@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
 const centralbankgenesys = require('./routes/centralbankgenesys')
 const express = require('express');
 const app = express();
 
-mongoose.connect('mongodb://localhost/CBG')
+mongoose.connect('mongodb://localhost/CBG', { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => console.log('Connected to the database....'))
 .catch((err) => console.error('Could not connect to the database', err));
 

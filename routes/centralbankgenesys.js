@@ -1,16 +1,34 @@
-const mongoose = require('mongoose');
 const Joi = require('joi');
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
 // Creating a account Schema 
 const accountSchema = new mongoose.Schema({
-  acc_name: String,
-  acc_number: Number,
-  state:  String,
-  date: { type: Date, default: Date.now },
-  transfer: Boolean, 
-  withdrawal: Boolean
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
+  account: {
+    type: Number,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
+  phone: {
+    type: Number,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
+  address: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  }
 })
 
 // Creating a collection in mongoose 
@@ -28,13 +46,12 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let account = new Account ({
-    acc_name: req.body.acc_name,
-    acc_number: req.body.acc_number,
-    state: req.body.state,
-    transfer: req.body.transfer,
-    withdrawal: req.body.withdrawal
+    name: req.body.name,
+    account: req.body.account,
+    phone: req.body.phone,
+    address: req.body.address
   });
-  account = await account.save(account);
+  account = await account.save();
   res.send(account);
 });
 
@@ -44,9 +61,10 @@ router.put('/:id', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const account = await Account.findByIdAndUpdate(req.params.id, {
-    acc_name: req.body.acc_name,
-    acc_number: req.body.acc_number,
-    state: req.body.state
+    name: req.body.name,
+    account: req.body.account,
+    phone: req.body.phone,
+    address: req.body.address
   }, 
   {new: true})
 
@@ -76,10 +94,15 @@ router.get('/:id', async (req, res) => {
 //Validate functionality 
 function validateAccount(account) {
   const schema = {
-    name: Joi.string().min(4).required()
+    name: Joi.string().min(5).max(50).required(),
+    account: Joi.string().min(5).max(50).required(),
+    phone: Joi.string().min(5).max(50).required(),
+    address: Joi.string().min(5).max(50).required(),
   };
 
   return Joi.validate(account, schema);
+  // return schema.validate(account);
 }
 
-module.exports = router;
+module.exports = router; 
+
